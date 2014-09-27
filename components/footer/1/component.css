@@ -1,0 +1,87 @@
+footer {
+	background-color:#333333;
+	padding-top:60px;
+}
+
+footer .Main {
+	clear:both;
+	height:300px;
+}
+
+footer .Main .Column {
+	width:33%;
+	float:left;
+}
+
+footer .Main .Column .Row {
+	margin-bottom: 40px;
+}
+
+footer .Main .Column .Row .Heading {
+	font-size:20px;
+	color:#ffffff;
+	margin-left:10%;
+	margin-right:10%;
+	line-height:1.6;
+	border-bottom: 1px solid #aaaaaa;
+}
+
+footer .Main .Column .Row .Content {
+	font-size:12px;
+	color:#aaaaaa;
+	margin-left:10%;
+	margin-top:10px;
+	line-height:1.6;
+	width:80%;
+}
+
+footer .Bottom {
+	width:100%;
+	background-color:#333333;
+	clear:both;
+	height:60px;
+	color:#ffffff;
+	font-size:12px;
+	border-top: 1px solid white;
+	margin-left:3%;
+	width:93%;
+}
+
+footer .Bottom .Left {
+	float:left;
+	margin-top:20px;
+}
+
+footer .Bottom .Left p {
+	display: inline;
+}
+
+footer .Bottom .Right {
+	float:right;
+	margin-top:20px;
+}
+
+footer .Bottom .Right p {
+	display: inline;
+}
+
+@media screen and (max-width : 760px){
+	footer .Main {
+		height:800px;
+		width:100%;
+	}
+	footer .Main .Column {
+		float:none;
+		width:100%;
+	}
+	footer .Main .Column .Row .Content {
+		width:80%;
+	}
+	footer .Bottom{
+		margin-left:10%;
+		width:80%;
+	}
+	footer .Bottom .Right {
+		display:none;
+	}
+}

@@ -1,0 +1,129 @@
+/*
+	CSS for SITE HEADER (GENERAL)
+
+	Header Features:
+		1. Stays in same position in window (at top) as user scrolls (fixed positioning)
+		2. Has dropshadow
+		3. Has translucent background
+		4. Responsive menu (in mobile mode it takes up entire width when clicked, no transitions)
+*/
+
+header {
+	position:fixed;
+	top:10px;
+	left: 50%;
+	width:94%;
+	margin: 0 0 0 -47%;
+	background-color:rgba(0,0,0,0.8);
+	z-index: 3;
+	overflow:hidden;
+	border-radius: 10px;
+}
+
+.SpacerStrip {
+	display:none;
+}
+
+/*
+	CSS for SITE TITLE
+*/
+
+.SiteTitle {
+	color:white;
+	font-weight:bold;
+	margin-top:20px;
+	margin-left:3%;
+	float:left;
+}
+
+.SiteTitle p {
+	display: inline;
+}
+
+#navbar-checkbox{
+	display:none;
+}
+
+.navbar-handle {
+	display:none;
+}
+
+.toggleLine {
+	width: 20px;
+	margin-top:5px;
+	border:1px solid #ffffff;
+	border-radius:2px;
+}
+
+/*
+	CSS for TOP NAVIGATION
+*/
+
+nav {
+	float:left;
+	color:white;
+}
+
+nav ul {
+	margin-top:20px;
+}
+
+nav ul li {
+	display:inline-block;
+	margin-right:20px;
+}
+
+nav ul li a:link,nav ul li a:visited,nav ul li a:hover,nav ul li a:active {
+	text-decoration: none;
+	color: white;
+}
+
+/*Responsive Styles*/
+
+@media screen and (max-width : 760px){
+
+	.SiteTitle {
+		margin-bottom:20px;
+		margin-left:10%;
+	}
+
+	nav {
+		display:none;
+		padding-left:0px;
+		background-color:#888888;
+	}
+
+	nav ul {
+		margin-top:0px;
+		padding-left:0px;
+		height:1000px;
+	}
+
+	nav ul li {
+		display:block;
+		width:100%;
+		height:20px;
+		background-color:#888888;
+		padding-top:20px;
+		padding-bottom:20px;
+		border-bottom:1px solid #555;
+		text-align:center;
+	}
+
+	input[type=checkbox]:checked ~ nav{
+    	display: block;
+		background-color:#888888;
+		width:100%;
+	}
+
+	.navbar-handle {
+		display:block;
+		position:absolute;
+		top:5px;
+		right:5px;
+		margin-right:40px;
+		margin-top:15px;
+		cursor:pointer;
+	}
+
+}

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<title>Better Theme Designer</title>
+		<link rel="stylesheet" type="text/css" href="designer.css"/>
+		<script src="jquery-1.7.1.min.js"></script>
+	</head>
+
+	<body onload="RefreshFrame()">
+
+		<header>
+			<div id="SiteTitle">
+				<strong>Better Theme Designer</strong>
+			</div>
+			<nav>
+				<ul>
+					<li class="navItem navHeader"><a href="#">Header</a></li>
+					<li class="navItem navContent"><a href="#">Content</a></li>
+					<li class="navItem navFooter"><a href="#">Footer</a></li>
+					<li class="navItem navExportCSS"><a href="#">Export CSS</a></li>
+					<li class="navItem navExportHTML"><a href="#">Export HTML</a></li>
+				</ul>
+			</nav>
+		</header>
+
+		<div id="SectionSettingsArea">
+		</div>
+
+		<iframe id="iFrame"></iframe>
+
+		<script type="text/javascript">
+
+			var HeaderComponentID = 1;
+			var ContentComponentID = 1;
+			var FooterComponentID = 1;
+			var HeaderHTML = "";
+			var ContentHTML = "";
+			var FooterHTML = "";
+			var HeaderCSS = "";
+			var ContentCSS = "";
+			var FooterCSS = "";
+			var HTML = "<p>Loading...</p>";
+			var CSS  = "";
+			var CSS_For_iFrame = "";
+			var iFrameContent = "<!DOCTYPE html>\n<html>\n\t<head>\n\t\t<style>" + CSS + "</style>\n\t</head>\n\t<body>" + HTML + "</body>\n</html>";
+			var Init = false;
+
+			function LoadJS(filename){
+				var fileref=document.createElement('script');
+				fileref.setAttribute("type","text/javascript");
+				fileref.setAttribute("src", filename);
+				if(typeof fileref!="undefined")
+					document.getElementsByTagName("head")[0].appendChild(fileref);
+				return true;
+			}
+
+			$(".navItem").click(function(){
+				var SectionSettingsHTML = "";
+				if($("#SectionSettingsArea").css("height")=="0px"){
+					if($(this).hasClass("navHeader"))
+						SectionSettingsHTML = GetSectionSettingsHTML("Header");
+					else if($(this).hasClass("navContent"))
+						SectionSettingsHTML = GetSectionSettingsHTML("Content");
+					else if($(this).hasClass("navFooter"))
+						SectionSettingsHTML = GetSectionSettingsHTML("Footer");
+					else if($(this).hasClass("navExportCSS"))
+						SectionSettingsHTML = GetSectionSettingsHTML("ExportCSS");
+					else if($(this).hasClass("navExportHTML"))
+						SectionSettingsHTML = GetSectionSettingsHTML("ExportHTML");
+					$("#SectionSettingsArea").html(SectionSettingsHTML);
+					SetFormOptions();
+					$("#SectionSettingsArea").animate({"height":"75%"},500);
+					$("#SectionSettingsArea").css("padding-top","10px");
+					$("#SectionSettingsArea").css("box-shadow","0px 2px 1px #888888");
+				} else {
+					$("#SectionSettingsArea").html("");
+					$("#SectionSettingsArea").animate({"height":"0px"},500);
+					$("#SectionSettingsArea").css("padding-top","0px");
+					$("#SectionSettingsArea").css("box-shadow","0px 0px 0px");
+				}
+			});
+
+
+			setTimeout(function (){
+				LoadData();
+         	}, 100);
+
+			function LoadData(){
+				console.log('loading data...')
+				var checkString = "Get_Header_"+HeaderComponentID+"_HTML";
+				var evalCheckString = eval("typeof " + checkString);
+				if(evalCheckString !== 'undefined'){
+					eval("Get_Header_"+HeaderComponentID+"_HTML();");
+				}
+				checkString = "Get_Content_"+ContentComponentID+"_HTML";
+				evalCheckString = eval("typeof " + checkString);
+				if(evalCheckString !== 'undefined'){
+					eval("Get_Content_"+ContentComponentID+"_HTML();");
+				}
+				checkString = "Get_Footer_"+FooterComponentID+"_HTML";
+				evalCheckString = eval("typeof " + checkString);
+				if(evalCheckString !== 'undefined'){
+					eval("Get_Footer_"+FooterComponentID+"_HTML();");
+				}
+				CSS  = "";
+				var checkString = "Get_Header_"+HeaderComponentID+"_CSS";
+				var evalCheckString = eval("typeof " + checkString);
+				if(evalCheckString !== 'undefined'){
+					eval("Get_Header_"+HeaderComponentID+"_CSS();");
+				}
+				checkString = "Get_Content_"+ContentComponentID+"_CSS";
+				evalCheckString = eval("typeof " + checkString);
+				if(evalCheckString !== 'undefined'){
+					eval("Get_Content_"+ContentComponentID+"_CSS();");
+				}
+				checkString = "Get_Footer_"+FooterComponentID+"_CSS";
+				evalCheckString = eval("typeof " + checkString);
+				if(evalCheckString !== 'undefined'){
+					eval("Get_Footer_"+FooterComponentID+"_CSS();");
+				}
+				return true;
+			}
+
+			function RefreshFrame(){
+				LoadComponents();	// Load required components
+				if(Init)
+					SetFormOptions();	// Set form options
+				CSS = HeaderCSS + "\n\n" + ContentCSS + "\n\n" + FooterCSS;
+				HTML = HeaderHTML + "\n\n" + ContentHTML + "\n\n" + FooterHTML;
+				CSS_For_iFrame = "<style>" + CSS + "</style>";
+				iFrameContent = "<!DOCTYPE html>\n<html>\n\t<head>" + CSS_For_iFrame + "</head>\n\t<body>" + HTML + "</body>\n</html>";
+				document.getElementById('iFrame').contentDocument.documentElement.innerHTML = iFrameContent; // Update iFrame
+				console.log('refreshed iframe');
+				Init = true;
+			}
+
+			function LoadComponents(){
+				var checkString = "Header_"+HeaderComponentID+"_Loaded";
+				var evalCheckString = eval("typeof " + checkString);
+				if(evalCheckString === 'undefined'){
+					LoadJS("components/header/"+HeaderComponentID+"/component.js"); // Load header
+					console.log('header '+HeaderComponentID+' loaded.');
+				}
+				checkString = "Content_"+ContentComponentID+"_Loaded";
+				evalCheckString = eval("typeof " + checkString);
+				if(evalCheckString === 'undefined'){
+					LoadJS("components/content/"+ContentComponentID+"/component.js"); // Load content
+					console.log('content '+ContentComponentID+' loaded.');
+				}
+				checkString = "Content_"+FooterComponentID+"_Loaded";
+				evalCheckString = eval("typeof " + checkString);
+				if(evalCheckString === 'undefined'){
+					LoadJS("components/footer/"+FooterComponentID+"/component.js"); // Load footer
+					console.log('footer '+FooterComponentID+' loaded.');
+				}
+				return;
+			}
+
+			function SetFormOptions(){
+				var checkString = "Get_Header_"+HeaderComponentID+"_Form_Options";
+				var evalCheckString = eval("typeof " + checkString);
+				if(evalCheckString !== 'undefined'){
+					var HeaderComponentOptions = eval("Get_Header_"+HeaderComponentID+"_Form_Options();");
+					$("#HeaderComponentOptions").html(HeaderComponentOptions);
+				}
+				checkString = "Get_Content_"+ContentComponentID+"_Form_Options";
+				evalCheckString = eval("typeof " + checkString);
+				if(evalCheckString !== 'undefined'){
+					var ContentComponentOptions = eval("Get_Content_"+ContentComponentID+"_Form_Options();");
+					$("#ContentComponentOptions").html(ContentComponentOptions);
+				}
+				checkString = "Get_Footer_"+FooterComponentID+"_Form_Options"
+				evalCheckString = eval("typeof " + checkString);
+				if(evalCheckString !== 'undefined'){
+					var FooterComponentOptions = eval("Get_Footer_"+FooterComponentID+"_Form_Options();");
+					$("#FooterComponentOptions").html(FooterComponentOptions);
+				}
+				return;
+			}
+
+			function UpdateHeaderType(){
+				HeaderComponentID = $("#HeaderType").val();
+				LoadComponents();
+				setTimeout(function (){
+					LoadData();
+	         	}, 100);
+				//SetFormOptions();
+			}
+
+			function UpdateContentType(){
+				ContentComponentID = $("#ContentType").val();
+				LoadComponents();
+				LoadData();
+				setTimeout(function (){
+					LoadData();
+		        }, 100);
+			}
+
+			function UpdateFooterType(){
+				FooterComponentID = $("#FooterType").val();
+				LoadComponents();
+				setTimeout(function (){
+					LoadData();
+			    }, 100);
+			}
+
+			function GetSectionSettingsHTML(section){
+				if(section=="Header"){
+					if (HeaderComponentID==1){
+						var HT1 = "selected=\"selected\"";
+						var HT2 = "";
+					}
+					else if (HeaderComponentID==2){
+						var HT1 = "";
+						var HT2 = "selected=\"selected\"";						
+					}
+					return "<p><strong>Header Options</strong></p><form><label>Header Type: </label><select id=\"HeaderType\" onchange=\"UpdateHeaderType();\"><option "+HT1+" value=\"1\">1</option><option "+HT2+" value=\"2\">2</option></select><div id=\"HeaderComponentOptions\"></div></form>";
+				}
+				if(section=="Content")
+					return "<p><strong>Content Options</strong></p><form><label>Content Type: </label><select id=\"ContentType\" onchange=\"UpdateContentType();\"><option value=\"1\">1</option></select><div id=\"ContentComponentOptions\"></div></form>";
+				if(section=="Footer")
+					return "<p><strong>Footer Options</strong></p><form><label>Footer Type: </label><select id=\"FooterType\" onchange=\"UpdateFooterType();\"><option value=\"1\">1</option></select><div id=\"FooterComponentOptions\"></div></form>";
+				if(section=="ExportCSS")
+					return "<p><label>CSS: </label><textarea style=\"width:90%;height:400px;\">"+CSS+"</textarea></p>";
+				if(section=="ExportHTML")
+					return "<p><label>HTML: </label><textarea style=\"width:90%;height:400px;\"><html>\n\t<head></head>\n\t<body>\n"+HTML+"\n\t</body>\n</html></textarea></p>";			
+			}
+		</script>
+
+	</body>
+
+
+</html>
